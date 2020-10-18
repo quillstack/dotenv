@@ -4,16 +4,16 @@ declare(strict_types=1);
 
 namespace QuillStack\Tests\Dotenv;
 
-use QuillStack\Dotenv\Dotenv;
-use QuillStack\Dotenv\Exceptions\DotenvFileNotExistsException;
+use QuillStack\Storage\Exceptions\FileNotExistsException;
 use QuillStack\Tests\AbstractEnvironmentTest;
 
 final class SimpleFileTest extends AbstractEnvironmentTest
 {
     public function testSimpleFile()
     {
-        $simple = dirname(__FILE__) . "/../Mocks/Fixtures/simple.env";
-        new Dotenv($simple);
+        $path = dirname(__FILE__) . '/../Mocks/Fixtures/simple.env';
+        $dotenv = $this->getDotenvWithPath($path);
+        $dotenv->load();
 
         $this->assertEquals('localhost', env('DATABASE_HOST'));
         $this->assertEquals('localhost', env('DATABASE_HOST'));
@@ -22,9 +22,10 @@ final class SimpleFileTest extends AbstractEnvironmentTest
 
     public function testNotExistingFile()
     {
-        $this->expectException(DotenvFileNotExistsException::class);
+        $this->expectException(FileNotExistsException::class);
 
-        $simple = dirname(__FILE__) . "/../Mocks/Fixtures/not-found.env";
-        new Dotenv($simple);
+        $path = dirname(__FILE__) . '/../Mocks/Fixtures/not-found.env';
+        $dotenv = $this->getDotenvWithPath($path);
+        $dotenv->load();
     }
 }
