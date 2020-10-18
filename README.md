@@ -1,5 +1,7 @@
 # QuillStack Dotenv
 
+[![Build Status](https://travis-ci.org/quillstack/dotenv.svg?branch=main)](https://travis-ci.org/quillstack/dotenv)
+
 The library to use .env files in your project.
 
 ### Unit tests
