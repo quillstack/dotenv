@@ -17,5 +17,4 @@ final class ValueNotSetTest extends AbstractEnvironmentTest
         $simple = dirname(__FILE__) . "/../Mocks/Fixtures/value-not-set.env";
         new Dotenv($simple);
     }
-
 }

@@ -17,5 +17,4 @@ final class HttpPrefixTest extends AbstractEnvironmentTest
         $simple = dirname(__FILE__) . "/../Mocks/Fixtures/http-prefix.env";
         new Dotenv($simple);
     }
-
 }
