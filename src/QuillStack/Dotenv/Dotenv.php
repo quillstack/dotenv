@@ -23,7 +23,7 @@ final class Dotenv
     /**
      * @param string $path
      */
-    public function __construct(string $path)
+    public function __construct(string $path = '')
     {
         $this->path = $path;
     }
@@ -33,6 +33,10 @@ final class Dotenv
      */
     public function load(): void
     {
+        if (empty($this->path)) {
+            return;
+        }
+
         $content = $this->storage->get($this->path);
         $env = explode("\n", $content);
 
