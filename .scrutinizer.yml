@@ -1,0 +1,4 @@
+buil.d:
+    environment:
+        php:
+            version: '8.0'

@@ -1,0 +1,28 @@
+{
+    "description": "The library for using .env files.",
+    "type": "library",
+    "license": "MIT",
+    "keywords": [
+        "quillstack",
+        "dotenv",
+        "env",
+        "environment"
+    ],
+    "homepage": "https://quillstack.org/dotenv",
+    "authors": [
+        {
+            "name": "Radek Ziemniewicz",
+            "email": "radek@quillstack.org"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "QuillStack\\Dotenv\\": "src/",
+            "QuillStack\\Tests\\Dotenv\\": "tests/",
+            "QuillStack\\Mocks\\Dotenv\\": "tests/mocks/"
+        }
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9"
+    }
+}
