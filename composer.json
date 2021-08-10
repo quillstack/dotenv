@@ -1,4 +1,5 @@
 {
+    "name": "quillstack/dotenv",
     "description": "The library for using .env files.",
     "type": "library",
     "license": "MIT",
