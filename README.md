@@ -15,6 +15,9 @@
 The library for using `.env` files. You can find the full documentation on the website: \
 https://quillstack.org/dotenv
 
+The `.env` should be used for sensitive information like passwords, hosts, keys, credentials, and all other values that 
+can be changed depending on the environment, e.g., debug mode settings or logs level. 
+
 ### Installation
 
 To install this package, run the standard command using _Composer_:
