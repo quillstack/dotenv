@@ -12,7 +12,53 @@
 [![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=quillstack_dotenv&metric=security_rating)](https://sonarcloud.io/dashboard?id=quillstack_dotenv)
 ![Packagist PHP Version Support](https://img.shields.io/packagist/php-v/quillstack/dotenv)
 
-The library for using `.env` files.
+The library for using `.env` files. You can find the full documentation on the website: \
+https://quillstack.org/dotenv
+
+### Installation
+
+To install this package, run the standard command using _Composer_:
+
+```shell
+composer require quillstack/dotenv
+```
+
+### Usage
+
+You can use Quillstack Dotenv package when you want to use `.env` files in your project.
+
+#### Simple usage
+
+If you created the `.env` file in the root directory of your proejct:
+
+```shell
+APP_DEBUG=true
+```
+
+You can load this `.env` file in your application:
+
+```php
+$dotenv = new Dotenv('.env');
+$dotenv->load();
+```
+
+Every time you need to know if your application works in debug mode, you can check it using this helper function:
+
+```php
+if (env('APP_DEBUG')) {
+    echo 'Debug mode';
+}
+```
+
+You can also define a default value depending on the context:
+
+```php
+if (env('APP_DEBUG', false)) {
+    echo 'Debug mode';
+}
+```
+
+### Docker
 
 ```shell
 $ docker-compose up -d
