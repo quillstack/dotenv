@@ -8,12 +8,17 @@ use Quillstack\LocalStorage\Exceptions\LocalFileNotExistsException;
 
 final class SimpleFileTest extends AbstractEnvironment
 {
-    public function testSimpleFile()
+    protected function setUp(): void
     {
+        parent::setUp();
+
         $path = dirname(__FILE__) . '/../fixtures/simple.env';
         $dotenv = $this->getDotenvWithPath($path);
         $dotenv->load();
+    }
 
+    public function testSimpleFile()
+    {
         $this->assertEquals('localhost', env('DATABASE_HOST'));
         $this->assertEquals('localhost', env('DATABASE_HOST'));
         $this->assertEquals('default', env('DATABASE_SECONDARY', 'default'));

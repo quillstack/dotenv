@@ -8,12 +8,17 @@ use Quillstack\Dotenv\Exceptions\DotenvValueNotSetException;
 
 class RequiredTest extends AbstractEnvironment
 {
-    public function testRequiredHelperFunction()
+    protected function setUp(): void
     {
+        parent::setUp();
+
         $path = dirname(__FILE__) . '/../fixtures/simple.env';
         $dotenv = $this->getDotenvWithPath($path);
         $dotenv->load();
+    }
 
+    public function testRequiredHelperFunction()
+    {
         $this->assertEquals('localhost', required('DATABASE_HOST'));
         $this->assertEquals('localhost', required('DATABASE_HOST'));
     }
@@ -21,10 +26,6 @@ class RequiredTest extends AbstractEnvironment
     public function testException()
     {
         $this->expectException(DotenvValueNotSetException::class);
-
-        $path = dirname(__FILE__) . '/../fixtures/simple.env';
-        $dotenv = $this->getDotenvWithPath($path);
-        $dotenv->load();
 
         $this->assertEquals('default', required('DATABASE_SECONDARY'));
     }

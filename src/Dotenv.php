@@ -38,8 +38,12 @@ class Dotenv
             }
 
             $this->validateKey($option, $currentLine);
-            $this->extractBooleanValues($option[1]);
-            $this->extractNumericValues($option[1]);
+
+            if (!$this->extractStringValue($option[1])) {
+                $this->extractBooleanValues($option[1]);
+                $this->extractNumericValues($option[1]);
+            }
+
             $this->saveToGlobals($option[0], $option[1]);
         }
     }
@@ -57,6 +61,23 @@ class Dotenv
         if (str_starts_with($option[0], 'HTTP_')) {
             throw new DotenvHttpPrefixNotAllowedException("HTTP_ prefix not allowed in line: {$currentLine}");
         }
+    }
+
+    private function extractStringValue(mixed &$value): bool
+    {
+        if (str_starts_with($value, '"') && str_ends_with($value, '"')) {
+            $value = trim($value, '"');
+
+            return true;
+        }
+
+        if (str_starts_with($value, "'") && str_ends_with($value, "'")) {
+            $value = trim($value, "'");
+
+            return true;
+        }
+
+        return false;
     }
 
     /**

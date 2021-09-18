@@ -53,12 +53,30 @@ if (env('APP_DEBUG')) {
 }
 ```
 
+#### Default values
+
 You can also define a default value depending on the context:
 
 ```php
 if (env('APP_DEBUG', false)) {
     echo 'Debug mode';
 }
+```
+
+#### Required keys
+
+You can use another helper method for required keys. If required key is not found
+an exception will be thrown:
+
+```php
+$dbHost = required('DATABASE_HOST');
+```
+
+The result if the key `DATABASE_HOST` is not set in the `.env` file:
+
+```text
+DotenvValueNotSetException:
+Value not set for key: DATABASE_HOST
 ```
 
 ### Unit tests
