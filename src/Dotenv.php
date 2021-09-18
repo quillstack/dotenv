@@ -31,16 +31,25 @@ class Dotenv
 
         foreach ($env as $index => $line) {
             $currentLine = $index + 1;
-            $option = explode('=', $line);
+            $lineArray = explode('=', $line);
+            list ($key, $value) = $this->getKeyAndValue($lineArray);
 
-            if ($option[0] === '') {
+            if ($key === '' || str_starts_with(trim($key), '#')) {
                 continue;
             }
 
-            $this->validateKey($option, $currentLine);
-            $this->extractValueTypes($option[1]);
-            $this->saveToGlobals($option[0], $option[1]);
+            $this->validateKey($lineArray, $currentLine);
+            $this->extractValueTypes($value);
+            $this->saveToGlobals($key, $value);
         }
+    }
+
+    private function getKeyAndValue(array $lineArray): array
+    {
+        return [
+            array_shift($lineArray),
+            implode('=', $lineArray),
+        ];
     }
 
     private function extractValueTypes(mixed &$value): void
