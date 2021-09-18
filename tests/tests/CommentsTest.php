@@ -12,7 +12,7 @@ class CommentsTest extends AbstractEnvironment
     {
         parent::setUp();
 
-        $path = dirname(__FILE__) . '/../fixtures/comments.env';
+        $path = dirname(__FILE__).'/../fixtures/comments.env';
         $dotenv = $this->getDotenvWithPath($path);
         $dotenv->load();
     }

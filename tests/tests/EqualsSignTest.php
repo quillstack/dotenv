@@ -10,7 +10,7 @@ class EqualsSignTest extends AbstractEnvironment
     {
         parent::setUp();
 
-        $path = dirname(__FILE__) . '/../fixtures/equals-sign.env';
+        $path = dirname(__FILE__).'/../fixtures/equals-sign.env';
         $dotenv = $this->getDotenvWithPath($path);
         $dotenv->load();
     }

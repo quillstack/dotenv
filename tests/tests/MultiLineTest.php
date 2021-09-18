@@ -10,7 +10,7 @@ class MultiLineTest extends AbstractEnvironment
     {
         parent::setUp();
 
-        $path = dirname(__FILE__) . '/../fixtures/multi-line.env';
+        $path = dirname(__FILE__).'/../fixtures/multi-line.env';
         $dotenv = $this->getDotenvWithPath($path);
         $dotenv->load();
     }
