@@ -38,9 +38,22 @@ class Dotenv
             }
 
             $this->validateKey($option, $currentLine);
-            $value = $this->extractBooleanValues($option[1]);
-            $this->saveToGlobals($option[0], $value);
+            $this->extractValueTypes($option[1]);
+            $this->saveToGlobals($option[0], $option[1]);
         }
+    }
+
+    private function extractValueTypes(mixed &$value): void
+    {
+        if ($this->extractStringValue($value)) {
+            return;
+        }
+
+        if ($this->extractBooleanValues($value)) {
+            return;
+        }
+
+        $this->extractNumericValues($value);
     }
 
     /**
@@ -58,18 +71,54 @@ class Dotenv
         }
     }
 
+    private function extractStringValue(mixed &$value): bool
+    {
+        if (str_starts_with($value, '"') && str_ends_with($value, '"')) {
+            $value = trim($value, '"');
+
+            return true;
+        }
+
+        if (str_starts_with($value, "'") && str_ends_with($value, "'")) {
+            $value = trim($value, "'");
+
+            return true;
+        }
+
+        return false;
+    }
+
     /**
      * Tries to extract boolean values.
      */
-    private function extractBooleanValues(mixed $value): mixed
+    private function extractBooleanValues(mixed &$value): bool
     {
         if (strcasecmp($value, 'true') === 0) {
+            $value = true;
+
             return true;
         } elseif (strcasecmp($value, 'false') === 0) {
+            $value = false;
+
+            return true;
+        }
+
+        return false;
+    }
+
+    private function extractNumericValues(mixed &$value): bool
+    {
+        if (!is_numeric($value)) {
             return false;
         }
 
-        return $value;
+        if (strstr($value, '.')) {
+            $value = (float) $value;
+        } else {
+            $value = (int) $value;
+        }
+
+        return true;
     }
 
     /**
@@ -77,6 +126,7 @@ class Dotenv
      */
     private function saveToGlobals(string $key, mixed $value): void
     {
+        putenv(sprintf('%s=%s', $key, $value));
         $_ENV[$key] = $value;
         $_SERVER[$key] = $value;
     }
