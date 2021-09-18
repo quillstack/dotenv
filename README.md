@@ -61,6 +61,19 @@ if (env('APP_DEBUG', false)) {
 }
 ```
 
+### Unit tests
+Run tests using a command:
+
+```shell
+phpdbg -qrr vendor/bin/phpunit
+```
+
+Check the tests coverage:
+
+```shell
+phpdbg -qrr vendor/bin/phpunit --coverage-html coverage tests
+```
+
 ### Docker
 
 ```shell

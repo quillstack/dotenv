@@ -38,8 +38,9 @@ class Dotenv
             }
 
             $this->validateKey($option, $currentLine);
-            $value = $this->extractBooleanValues($option[1]);
-            $this->saveToGlobals($option[0], $value);
+            $this->extractBooleanValues($option[1]);
+            $this->extractNumericValues($option[1]);
+            $this->saveToGlobals($option[0], $option[1]);
         }
     }
 
@@ -61,15 +62,26 @@ class Dotenv
     /**
      * Tries to extract boolean values.
      */
-    private function extractBooleanValues(mixed $value): mixed
+    private function extractBooleanValues(mixed &$value): void
     {
         if (strcasecmp($value, 'true') === 0) {
-            return true;
+            $value = true;
         } elseif (strcasecmp($value, 'false') === 0) {
-            return false;
+            $value = false;
+        }
+    }
+
+    private function extractNumericValues(mixed &$value): void
+    {
+        if (!is_numeric($value)) {
+            return;
         }
 
-        return $value;
+        if (strstr($value, '.')) {
+            $value = (float) $value;
+        } else {
+            $value = (int) $value;
+        }
     }
 
     /**
@@ -77,6 +89,7 @@ class Dotenv
      */
     private function saveToGlobals(string $key, mixed $value): void
     {
+        putenv(sprintf('%s=%s', $key, $value));
         $_ENV[$key] = $value;
         $_SERVER[$key] = $value;
     }
