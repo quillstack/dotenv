@@ -79,6 +79,14 @@ DotenvValueNotSetException:
 Value not set for key: DATABASE_HOST
 ```
 
+#### Multi-line values
+
+You can define multi-line values in your `.env` file by using `\n` separator instead of new lines for example:
+
+```text
+PRIVATE_KEY="line1\nline2\nline3"
+```
+
 ### Unit tests
 Run tests using a command:
 
