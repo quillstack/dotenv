@@ -10,11 +10,13 @@ use Quillstack\LocalStorage\LocalStorage;
 
 class Dotenv
 {
-    public LocalStorage $storage;
+    private LocalStorage $storage;
+    private ValueTypes $valueTypes;
 
     public function __construct(private string $path = '')
     {
         $this->storage = new LocalStorage();
+        $this->valueTypes = new ValueTypes();
     }
 
     /**
@@ -30,7 +32,6 @@ class Dotenv
         $env = explode("\n", $content);
 
         foreach ($env as $index => $line) {
-            $currentLine = $index + 1;
             $lineArray = explode('=', $line);
             list($key, $value) = $this->getKeyAndValue($lineArray);
 
@@ -38,8 +39,8 @@ class Dotenv
                 continue;
             }
 
-            $this->validateKey($lineArray, $currentLine);
-            $this->extractValueTypes($value);
+            $this->validateKey($lineArray, $index);
+            $this->valueTypes->extractValueTypes($value);
             $this->saveToGlobals($key, $value);
         }
     }
@@ -57,87 +58,20 @@ class Dotenv
         ];
     }
 
-    private function extractValueTypes(mixed &$value): void
+    private function validateKey(array $option, int $index): void
     {
-        if ($this->extractStringValue($value)) {
-            return;
-        }
+        ++$index;
 
-        if ($this->extractBooleanValues($value)) {
-            return;
-        }
-
-        $this->extractNumericValues($value);
-    }
-
-    /**
-     * Simple validation.
-     */
-    private function validateKey(array $option, int $currentLine): void
-    {
         if (!isset($option[1])) {
-            throw new DotenvValueNotSetException("Value not set in line: {$currentLine}");
+            throw new DotenvValueNotSetException("Value not set in line: {$index}");
         }
 
         // To protect against unexpected changes of HTTP headers.
         if (str_starts_with($option[0], 'HTTP_')) {
-            throw new DotenvHttpPrefixNotAllowedException("HTTP_ prefix not allowed in line: {$currentLine}");
+            throw new DotenvHttpPrefixNotAllowedException("HTTP_ prefix not allowed in line: {$index}");
         }
     }
 
-    private function extractStringValue(mixed &$value): bool
-    {
-        if (str_starts_with($value, '"') && str_ends_with($value, '"')) {
-            $value = trim($value, '"');
-
-            return true;
-        }
-
-        if (str_starts_with($value, "'") && str_ends_with($value, "'")) {
-            $value = trim($value, "'");
-
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
-     * Tries to extract boolean values.
-     */
-    private function extractBooleanValues(mixed &$value): bool
-    {
-        if (strcasecmp($value, 'true') === 0) {
-            $value = true;
-
-            return true;
-        } elseif (strcasecmp($value, 'false') === 0) {
-            $value = false;
-
-            return true;
-        }
-
-        return false;
-    }
-
-    private function extractNumericValues(mixed &$value): bool
-    {
-        if (!is_numeric($value)) {
-            return false;
-        }
-
-        if (strstr($value, '.')) {
-            $value = (float) $value;
-        } else {
-            $value = (int) $value;
-        }
-
-        return true;
-    }
-
-    /**
-     * Save values to global arrays.
-     */
     private function saveToGlobals(string $key, mixed $value): void
     {
         putenv(sprintf('%s=%s', $key, $value));

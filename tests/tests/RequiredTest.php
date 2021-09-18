@@ -26,6 +26,7 @@ class RequiredTest extends AbstractEnvironment
     public function testException()
     {
         $this->expectException(DotenvValueNotSetException::class);
+        $this->expectExceptionMessage('Value not set for key: DATABASE_SECONDARY');
 
         $this->assertEquals('default', required('DATABASE_SECONDARY'));
     }
