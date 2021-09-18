@@ -38,14 +38,22 @@ class Dotenv
             }
 
             $this->validateKey($option, $currentLine);
-
-            if (!$this->extractStringValue($option[1])) {
-                $this->extractBooleanValues($option[1]);
-                $this->extractNumericValues($option[1]);
-            }
-
+            $this->extractValueTypes($option[1]);
             $this->saveToGlobals($option[0], $option[1]);
         }
+    }
+
+    private function extractValueTypes(mixed &$value): void
+    {
+        if ($this->extractStringValue($value)) {
+            return;
+        }
+
+        if ($this->extractBooleanValues($value)) {
+            return;
+        }
+
+        $this->extractNumericValues($value);
     }
 
     /**
@@ -83,19 +91,25 @@ class Dotenv
     /**
      * Tries to extract boolean values.
      */
-    private function extractBooleanValues(mixed &$value): void
+    private function extractBooleanValues(mixed &$value): bool
     {
         if (strcasecmp($value, 'true') === 0) {
             $value = true;
+
+            return true;
         } elseif (strcasecmp($value, 'false') === 0) {
             $value = false;
+
+            return true;
         }
+
+        return false;
     }
 
-    private function extractNumericValues(mixed &$value): void
+    private function extractNumericValues(mixed &$value): bool
     {
         if (!is_numeric($value)) {
-            return;
+            return false;
         }
 
         if (strstr($value, '.')) {
@@ -103,6 +117,8 @@ class Dotenv
         } else {
             $value = (int) $value;
         }
+
+        return true;
     }
 
     /**
