@@ -34,7 +34,7 @@ class Dotenv
             $lineArray = explode('=', $line);
             list($key, $value) = $this->getKeyAndValue($lineArray);
 
-            if ($key === '' || str_starts_with(trim($key), '#')) {
+            if ($this->shouldBeSkipped($key)) {
                 continue;
             }
 
@@ -42,6 +42,11 @@ class Dotenv
             $this->extractValueTypes($value);
             $this->saveToGlobals($key, $value);
         }
+    }
+
+    private function shouldBeSkipped(string $key): bool
+    {
+        return $key === '' || str_starts_with(trim($key), '#');
     }
 
     private function getKeyAndValue(array $lineArray): array
