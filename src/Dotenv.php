@@ -32,7 +32,7 @@ class Dotenv
         foreach ($env as $index => $line) {
             $currentLine = $index + 1;
             $lineArray = explode('=', $line);
-            list ($key, $value) = $this->getKeyAndValue($lineArray);
+            list($key, $value) = $this->getKeyAndValue($lineArray);
 
             if ($key === '' || str_starts_with(trim($key), '#')) {
                 continue;
