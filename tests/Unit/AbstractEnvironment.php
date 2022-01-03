@@ -2,25 +2,24 @@
 
 declare(strict_types=1);
 
-namespace Quillstack\Tests\Dotenv;
+namespace Quillstack\Dotenv\Tests\Unit;
 
-use PHPUnit\Framework\TestCase;
 use Quillstack\Dotenv\Dotenv;
 
-abstract class AbstractEnvironment extends TestCase
+abstract class AbstractEnvironment
 {
     /**
      * @var array
      */
     private array $cache;
 
-    protected function setUp(): void
+    public function __construct()
     {
         $this->cache['env'] = $_ENV;
         $this->cache['server'] = $_SERVER;
     }
 
-    protected function tearDown(): void
+    public function __destruct()
     {
         $_ENV = $this->cache['env'];
         $_SERVER = $this->cache['server'];
