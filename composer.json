@@ -28,7 +28,7 @@
         }
     },
     "require-dev": {
-        "quillstack/unit-tests": "^0.1.1"
+        "quillstack/unit-tests": "^0.2"
     },
     "require": {
         "php": "^8.0",

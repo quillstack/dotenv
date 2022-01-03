@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace Quillstack\Dotenv\Tests\Unit;
 
+use Quillstack\UnitTests\AssertEqual;
+
 class TestMultiLine extends AbstractEnvironment
 {
-    public function __construct()
+    public function __construct(private AssertEqual $assertEqual)
     {
         parent::__construct();
 
@@ -15,14 +17,8 @@ class TestMultiLine extends AbstractEnvironment
         $dotenv->load();
     }
 
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-    }
-
     public function testEqualsSign()
     {
-        $this->assertEquals("line1\nline2\nline3", env('PRIVATE_KEY'));
+        $this->assertEqual->equal("line1\nline2\nline3", env('PRIVATE_KEY'));
     }
 }
