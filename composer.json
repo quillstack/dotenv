@@ -24,12 +24,11 @@
         ],
         "psr-4": {
             "Quillstack\\Dotenv\\": "src/",
-            "Quillstack\\Tests\\Dotenv\\": "tests/tests"
+            "Quillstack\\Dotenv\\Tests\\": "tests/"
         }
     },
     "require-dev": {
-        "symfony/var-dumper": "^5.2",
-        "phpunit/phpunit": "^9"
+        "quillstack/unit-tests": "^0.2"
     },
     "require": {
         "php": "^8.0",

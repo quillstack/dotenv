@@ -91,13 +91,7 @@ PRIVATE_KEY="line1\nline2\nline3"
 Run tests using a command:
 
 ```shell
-phpdbg -qrr vendor/bin/phpunit
-```
-
-Check the tests coverage:
-
-```shell
-phpdbg -qrr vendor/bin/phpunit --coverage-html coverage tests
+phpdbg -qrr ./vendor/bin/unit-tests
 ```
 
 ### Docker
