@@ -32,7 +32,7 @@
     },
     "require": {
         "php": "^8.0",
-        "quillstack/local-storage": "^0.0.1"
+        "quillstack/local-storage": "^0.0.6"
     },
     "extra": {
         "branch-alias": {
