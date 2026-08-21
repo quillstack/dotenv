@@ -29,15 +29,15 @@
     },
     "require-dev": {
         "phpstan/phpstan": "^2.0",
-        "quillstack/unit-tests": "^0.6"
+        "quillstack/unit-tests": "^0.7"
     },
     "require": {
         "php": "^8.1",
-        "quillstack/local-storage": "^0.3"
+        "quillstack/local-storage": "^0.4"
     },
     "extra": {
         "branch-alias": {
-            "dev-main": "0.3.x-dev"
+            "dev-main": "0.4.x-dev"
         }
     },
     "scripts": {
