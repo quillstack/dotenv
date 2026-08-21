@@ -1,6 +1,6 @@
 # Quillstack Dotenv
 
-[![Build Status](https://app.travis-ci.com/quillstack/dotenv.svg?branch=main)](https://app.travis-ci.com/quillstack/dotenv)
+[![Tests](https://github.com/quillstack/dotenv/actions/workflows/tests.yml/badge.svg)](https://github.com/quillstack/dotenv/actions/workflows/tests.yml)
 [![Downloads](https://img.shields.io/packagist/dt/quillstack/dotenv.svg)](https://packagist.org/packages/quillstack/dotenv)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=quillstack_dotenv&metric=coverage)](https://sonarcloud.io/dashboard?id=quillstack_dotenv)
 [![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=quillstack_dotenv&metric=ncloc)](https://sonarcloud.io/dashboard?id=quillstack_dotenv)
