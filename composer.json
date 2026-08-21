@@ -28,15 +28,15 @@
         }
     },
     "require-dev": {
-        "quillstack/unit-tests": "^0.4"
+        "quillstack/unit-tests": "^0.5"
     },
     "require": {
         "php": "^8.1",
-        "quillstack/local-storage": "^0.1"
+        "quillstack/local-storage": "^0.2"
     },
     "extra": {
         "branch-alias": {
-            "dev-main": "0.1.x-dev"
+            "dev-main": "0.2.x-dev"
         }
     }
 }
