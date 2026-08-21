@@ -29,6 +29,7 @@ class Dotenv
         }
 
         $content = $this->storage->get($this->path);
+        $content = is_string($content) ? $content : '';
         $env = explode("\n", $content);
 
         foreach ($env as $index => $line) {
@@ -50,14 +51,23 @@ class Dotenv
         return $key === '' || str_starts_with(trim($key), '#');
     }
 
+    /**
+     * Splits a line into its key and its value, keeping any equals signs inside the value.
+     *
+     * @param string[] $lineArray
+     *
+     * @return array{0: string, 1: string}
+     */
     private function getKeyAndValue(array $lineArray): array
     {
-        return [
-            array_shift($lineArray),
-            implode('=', $lineArray),
-        ];
+        $key = array_shift($lineArray) ?? '';
+
+        return [$key, implode('=', $lineArray)];
     }
 
+    /**
+     * @param string[] $option
+     */
     private function validateKey(array $option, int $index): void
     {
         ++$index;
@@ -74,7 +84,7 @@ class Dotenv
 
     private function saveToGlobals(string $key, mixed $value): void
     {
-        putenv(sprintf('%s=%s', $key, $value));
+        putenv($key . '=' . (is_scalar($value) ? (string) $value : ''));
         $_ENV[$key] = $value;
         $_SERVER[$key] = $value;
     }

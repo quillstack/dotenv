@@ -30,6 +30,10 @@ class ValueTypes
 
     private function extractStringValue(mixed &$value): bool
     {
+        if (!is_string($value)) {
+            return false;
+        }
+
         if (str_starts_with($value, '"') && str_ends_with($value, '"')) {
             $value = trim($value, '"');
 
@@ -50,11 +54,17 @@ class ValueTypes
      */
     private function extractBooleanValues(mixed &$value): bool
     {
+        if (!is_string($value)) {
+            return false;
+        }
+
         if (strcasecmp($value, 'true') === 0) {
             $value = true;
 
             return true;
-        } elseif (strcasecmp($value, 'false') === 0) {
+        }
+
+        if (strcasecmp($value, 'false') === 0) {
             $value = false;
 
             return true;
@@ -69,7 +79,7 @@ class ValueTypes
             return;
         }
 
-        if (strstr($value, '.')) {
+        if (is_string($value) && str_contains($value, '.')) {
             $value = (float) $value;
         } else {
             $value = (int) $value;
