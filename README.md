@@ -210,10 +210,10 @@ Reading that file, once:
 | josegonzalez/dotenv | 301 µs | 2.06× | 7 | 153 kB |
 | vlucas/phpdotenv | 479 µs | 3.27× | 34 | 336 kB |
 
-The second row is this package **with**
-[quillstack/dotenv-expand](https://github.com/quillstack/dotenv-expand) on top: adding it costs
-about a fifth of the reading time, and it is still the fastest way in this table to resolve a
-`.env` at all. That package's README has the same comparison on a file which does use `${…}` —
+The second row is this package with
+[quillstack/dotenv-expand](https://github.com/quillstack/dotenv-expand) on top: **adding it
+costs about a fifth of the reading time**, and it is still the fastest way in this table to
+resolve a `.env` at all. That package's README has the same comparison on a file which does use `${…}` —
 one this package refuses outright, so it has no row there.
 
 The files-loaded column is where the cold-start difference comes from: `vlucas/phpdotenv` reads
