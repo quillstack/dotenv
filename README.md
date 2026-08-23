@@ -188,48 +188,43 @@ References are left exactly as written, escapes included — which is what lets
 
 ## Benchmark
 
-Measured with [quillstack/benchmark](https://github.com/quillstack/benchmark) on a `.env` of 34
-keys with no interpolation in it, which all four read identically. Runs are interleaved and each
-figure is the median of three.
+Measured with [quillstack/benchmark](https://github.com/quillstack/benchmark) on **one file of
+34 keys with no interpolation in it**, which all five read identically. Runs are interleaved,
+each figure is the median of five, and PHP is 8.5.7.
 
 | | Version |
 | --- | --- |
-| PHP | 8.5.7 |
-| quillstack/dotenv | v0.7.0 |
+| quillstack/dotenv | v0.7.1 |
+| quillstack/dotenv-expand | v0.6.1 |
 | symfony/dotenv | v7.4.15 |
 | josegonzalez/dotenv | 4.0.0 (on m1/env 2.2.0) |
 | vlucas/phpdotenv | v5.6.4 |
 
-**A single load in a fresh process** — how a `.env` is actually read: once, at the start:
+Reading that file, once:
 
-| | Time | Relative |
-| --- | --- | --- |
-| **quillstack/dotenv** | **1.59 ms** | — |
-| symfony/dotenv | 1.80 ms | 1.1× |
-| josegonzalez/dotenv | 2.45 ms | 1.5× |
-| vlucas/phpdotenv | 6.20 ms | 3.9× |
+| | Per load | Relative | Files loaded | Memory |
+| --- | --- | --- | --- | --- |
+| **quillstack/dotenv** | **146 µs** | — | 5 | 70 kB |
+| quillstack/dotenv + dotenv-expand | 176 µs | 1.20× | 6 | 87 kB |
+| symfony/dotenv | 233 µs | 1.60× | 1 | 149 kB |
+| josegonzalez/dotenv | 301 µs | 2.06× | 7 | 153 kB |
+| vlucas/phpdotenv | 479 µs | 3.27× | 34 | 336 kB |
 
-**Parsing alone**, a thousand times in a warm process:
+The second row is this package **with**
+[quillstack/dotenv-expand](https://github.com/quillstack/dotenv-expand) on top: adding it costs
+about a fifth of the reading time, and it is still the fastest way in this table to resolve a
+`.env` at all. That package's README has the same comparison on a file which does use `${…}` —
+one this package refuses outright, so it has no row there.
 
-| | Per load | Relative |
-| --- | --- | --- |
-| **quillstack/dotenv** | **148 µs** | — |
-| symfony/dotenv | 219 µs | 1.5× |
-| josegonzalez/dotenv | 247 µs | 1.7× |
-| vlucas/phpdotenv | 389 µs | 2.6× |
-
-The cold gap is mostly class loading: `vlucas/phpdotenv` pulls in 34 files and four packages
-before it parses anything, against four files here.
+The files-loaded column is where the cold-start difference comes from: `vlucas/phpdotenv` reads
+34 files and four packages into memory before parsing anything. Starting a process and loading
+those dominates the first read by an order of magnitude more than parsing does, which is why the
+per-load figure above is measured warm — it is the part this package controls.
 
 **What the numbers do not say:** the other three expand `${…}` and this one does not, and
 `symfony/dotenv` also reads `.env.local` layering and shell command substitution. Being faster
-because you do less is not being faster — with
-[quillstack/dotenv-expand](https://github.com/quillstack/dotenv-expand) installed, resolving a
-file of 18 keys still comes out ahead, and that table is in its README.
-
-`benchmark:console` reports `Took` and `calls per second` too; both are dominated by PHP process
-start-up, identical for every library. The figure that means anything is `avg call time`, which
-each measured script reports about itself.
+because you do less is not being faster; the row above with `dotenv-expand` added is the like-for
+-like one.
 
 ## Tests
 
