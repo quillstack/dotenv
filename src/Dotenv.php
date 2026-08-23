@@ -41,9 +41,83 @@ class Dotenv
             }
 
             $this->validateKey($lineArray, $index);
+
+            $key = $this->withoutExport($key);
+            $value = $this->withoutComment($value);
+
             $this->valueTypes->extractValueTypes($value);
             $this->saveToGlobals($key, $value);
         }
+    }
+
+    /**
+     * A key written the way it would be written for a shell.
+     *
+     * `export DB_PORT=5432` is how the same file is read by `source`, and it is common enough
+     * in a `.env` that not understanding it does not mean the line is skipped: the key became
+     * `export DB_PORT`, and `DB_PORT` was simply never set.
+     */
+    private function withoutExport(string $key): string
+    {
+        $trimmed = ltrim($key);
+
+        if (!str_starts_with($trimmed, 'export') || !preg_match('/^export\s+(\S.*)$/', $trimmed, $parts)) {
+            return $key;
+        }
+
+        return $parts[1];
+    }
+
+    /**
+     * The value, with anything a reader would call a comment taken off the end.
+     *
+     * `DB_PORT=5432 # the default` used to be read as the whole of `5432 # the default`: no
+     * error, nothing empty, just a value that looks right and is not. A `#` starts a comment
+     * only where a shell would treat it as one — after whitespace, and outside quotes — so
+     * `KEY=foo#bar` is still `foo#bar`, and a `#` inside a quoted value stays put.
+     */
+    private function withoutComment(string $value): string
+    {
+        $from = 0;
+        $trimmed = ltrim($value);
+        $quote = $trimmed === '' ? '' : $trimmed[0];
+
+        if ($quote === '"' || $quote === "'") {
+            $opening = strpos($value, $quote);
+            $closing = $opening === false ? false : strpos($value, $quote, $opening + 1);
+
+            if ($closing === false) {
+                return $value;
+            }
+
+            $from = $closing + 1;
+        }
+
+        $mark = $this->commentPosition($value, $from);
+
+        return $mark === null ? $value : rtrim(substr($value, 0, $mark));
+    }
+
+    /**
+     * Where the comment starts, looking from `$from` onwards, or null where there is none.
+     */
+    private function commentPosition(string $value, int $from): ?int
+    {
+        $length = strlen($value);
+
+        for ($i = $from; $i < $length; ++$i) {
+            if ($value[$i] !== '#') {
+                continue;
+            }
+
+            // At the very start of the value, or after a space or a tab. `hunter2#` is a
+            // password, not a comment nobody wrote.
+            if ($i === 0 || $value[$i - 1] === ' ' || $value[$i - 1] === "\t") {
+                return $i;
+            }
+        }
+
+        return null;
     }
 
     private function shouldBeSkipped(string $key): bool

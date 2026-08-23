@@ -88,6 +88,44 @@ You can define multi-line values in your `.env` file by using `\n` separator ins
 PRIVATE_KEY="line1\nline2\nline3"
 ```
 
+#### Comments after a value
+
+A `#` starts a comment where a shell would treat it as one — after whitespace, and outside
+quotes:
+
+```text
+DB_PORT=5432 # the default
+PASSWORD=hunter2#7            # not a comment: no space before the hash
+QUOTED="a # inside quotes"    # the hash inside stays, the one out here goes
+```
+
+```php
+env('DB_PORT');   // 5432, as a number
+env('PASSWORD');  // 'hunter2#7'
+env('QUOTED');    // 'a # inside quotes'
+```
+
+The type is read from what is left once the comment is off, so a commented number is still a
+number.
+
+#### The `export` keyword
+
+The same file read by `source` is written with `export`, and it is understood here too:
+
+```text
+export DB_PORT=5432
+```
+
+```php
+env('DB_PORT');   // 5432
+```
+
+#### What is not supported
+
+There is no variable interpolation: `URL=${BASE}/v1` is the literal string `${BASE}/v1`, not
+`BASE` followed by `/v1`. If you need one value built out of another, build it in the
+application where it can be read.
+
 ### Unit tests
 Run tests using a command:
 
