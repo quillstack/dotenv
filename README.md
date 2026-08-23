@@ -120,11 +120,46 @@ export DB_PORT=5432
 env('DB_PORT');   // 5432
 ```
 
-#### What is not supported
+#### Values built from other values
 
-There is no variable interpolation: `URL=${BASE}/v1` is the literal string `${BASE}/v1`, not
-`BASE` followed by `/v1`. If you need one value built out of another, build it in the
-application where it can be read.
+This package does not expand `${SOMETHING}`, and it does not quietly hand you the text either:
+
+```text
+BASE=https://example.org
+URL=${BASE}/v1
+```
+
+```text
+DotenvInterpolationNotSupportedException:
+The value of `URL` uses `${...}`, which this package does not expand. Install
+quillstack/dotenv-expand to resolve it, or write `\${` for a literal `${`.
+```
+
+**A value that looks like an address and is not one is worse than a file that refuses to load.**
+Install [quillstack/dotenv-expand](https://github.com/quillstack/dotenv-expand) and it resolves;
+leave it out and you are told, with the key and what to do about it.
+
+Where a `${` means only itself, escape it:
+
+```text
+PRICE=\${9.99}
+```
+
+```php
+env('PRICE');   // '${9.99}'
+```
+
+#### Reading a file without loading it
+
+`parse()` hands back what the file holds and touches nothing:
+
+```php
+$values = (new Dotenv('.env'))->parse();
+// ['BASE' => 'https://example.org', 'URL' => '${BASE}/v1']
+```
+
+References are left exactly as they were written, escapes included — which is what lets
+`quillstack/dotenv-expand` tell `${BASE}` from `\${BASE}`.
 
 ### Unit tests
 Run tests using a command:

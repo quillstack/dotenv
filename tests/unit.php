@@ -5,6 +5,8 @@ declare(strict_types=1);
 return [
     \Quillstack\Dotenv\Tests\Unit\TestBoolean::class,
     \Quillstack\Dotenv\Tests\Unit\TestComments::class,
+    \Quillstack\Dotenv\Tests\Unit\TestInterpolation::class,
+    \Quillstack\Dotenv\Tests\Unit\TestParse::class,
     \Quillstack\Dotenv\Tests\Unit\TestTrailingComments::class,
     \Quillstack\Dotenv\Tests\Unit\TestExport::class,
     \Quillstack\Dotenv\Tests\Unit\TestEmptyPath::class,

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Quillstack\Dotenv;
 
 use Quillstack\Dotenv\Exceptions\DotenvHttpPrefixNotAllowedException;
+use Quillstack\Dotenv\Exceptions\DotenvInterpolationNotSupportedException;
 use Quillstack\Dotenv\Exceptions\DotenvValueNotSetException;
 use Quillstack\LocalStorage\LocalStorage;
 
@@ -20,17 +21,46 @@ class Dotenv
     }
 
     /**
-     * Loads .env file.
+     * Reads the file and puts what it holds into the environment.
      */
     public function load(): void
     {
+        foreach ($this->parse() as $key => $value) {
+            // Nothing here expands `${SOMETHING}`, and a value carrying one is not the value
+            // the file meant — `URL=${BASE}/v1` would reach the application as a string that
+            // looks like an address and is not one. Refusing is the only answer that does not
+            // involve guessing.
+            if (is_string($value) && Interpolation::isUsed($value)) {
+                throw new DotenvInterpolationNotSupportedException(
+                    "The value of `{$key}` uses `\${...}`, which this package does not expand. "
+                    . 'Install quillstack/dotenv-expand to resolve it, or write `\\${` for a '
+                    . 'literal `${`.'
+                );
+            }
+
+            $this->saveToGlobals($key, is_string($value) ? Interpolation::unescape($value) : $value);
+        }
+    }
+
+    /**
+     * What the file holds, without touching the environment.
+     *
+     * References to other values are left exactly as they were written, escapes included, which
+     * is what lets `quillstack/dotenv-expand` resolve them: it has to be able to tell `${BASE}`
+     * from `\${BASE}`, and reading them would take that difference away.
+     *
+     * @return array<string, mixed>
+     */
+    public function parse(): array
+    {
         if (empty($this->path)) {
-            return;
+            return [];
         }
 
         $content = $this->storage->get($this->path);
         $content = is_string($content) ? $content : '';
         $env = explode("\n", $content);
+        $parsed = [];
 
         foreach ($env as $index => $line) {
             $lineArray = explode('=', $line);
@@ -46,8 +76,10 @@ class Dotenv
             $value = $this->withoutComment($value);
 
             $this->valueTypes->extractValueTypes($value);
-            $this->saveToGlobals($key, $value);
+            $parsed[$key] = $value;
         }
+
+        return $parsed;
     }
 
     /**
