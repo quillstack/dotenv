@@ -6,6 +6,11 @@
 [![PHP Version](https://img.shields.io/packagist/php-v/quillstack/dotenv)](https://packagist.org/packages/quillstack/dotenv)
 [![StyleCI](https://github.styleci.io/repos/303510748/shield?branch=main)](https://github.styleci.io/repos/303510748?branch=main)
 [![CodeFactor](https://www.codefactor.io/repository/github/quillstack/dotenv/badge)](https://www.codefactor.io/repository/github/quillstack/dotenv)
+[![Quality Gate](https://sonarcloud.io/api/project_badges/measure?project=quillstack_dotenv&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=quillstack_dotenv)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=quillstack_dotenv&metric=coverage)](https://sonarcloud.io/summary/new_code?id=quillstack_dotenv)
+[![Maintainability](https://sonarcloud.io/api/project_badges/measure?project=quillstack_dotenv&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=quillstack_dotenv)
+[![Reliability](https://sonarcloud.io/api/project_badges/measure?project=quillstack_dotenv&metric=reliability_rating)](https://sonarcloud.io/summary/new_code?id=quillstack_dotenv)
+[![Security](https://sonarcloud.io/api/project_badges/measure?project=quillstack_dotenv&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=quillstack_dotenv)
 [![Maintainability](https://api.codeclimate.com/v1/badges/df220a266c66f5b4c19c/maintainability)](https://codeclimate.com/github/quillstack/dotenv/maintainability)
 [![License](https://img.shields.io/packagist/l/quillstack/dotenv)](https://github.com/quillstack/dotenv/blob/main/LICENSE)
 
