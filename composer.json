@@ -11,7 +11,7 @@
         "quillstack",
         "php"
     ],
-    "homepage": "https://quillstack.org/dotenv",
+    "homepage": "https://quillstack.org/packages/dotenv",
     "authors": [
         {
             "name": "Radek Ziemniewicz",
