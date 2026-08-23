@@ -14,8 +14,7 @@
 [![Maintainability](https://api.codeclimate.com/v1/badges/df220a266c66f5b4c19c/maintainability)](https://codeclimate.com/github/quillstack/dotenv/maintainability)
 [![License](https://img.shields.io/packagist/l/quillstack/dotenv)](https://github.com/quillstack/dotenv/blob/main/LICENSE)
 
-The library for using `.env` files. You can find the full documentation on the website: \
-https://quillstack.org/dotenv
+The library for using `.env` files.
 
 The `.env` should be used for sensitive information like passwords, hosts, keys, credentials, and all other values that 
 can be changed depending on the environment, e.g., debug mode settings or logs level. 
